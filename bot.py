@@ -38,7 +38,7 @@ async def on_message(message):
     if message.content.lower().startswith(".penis"):
         output = message.content.split()
         if "@everyone" in output:
-            await message.author.send("Look buddy, you better CUT THAT OUT.")
+            await message.author.send("YOUR PP SMALL LOL")
         elif len(output) == 2:
             await message.channel.send("{}'S PENIS SIZE: 8{}>".format(message.content[7:], random.randint(0, 20) * "="))
         else:
