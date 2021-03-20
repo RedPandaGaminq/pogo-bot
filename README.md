@@ -1,5 +1,5 @@
 # pogo-bot
-PogO Bot
+**PogO Bot**
 
 Commands: <br />
 &nbsp;&nbsp;&nbsp;&nbsp;.nuke - This command has been temperarily disabled. <br />
