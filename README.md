@@ -2,4 +2,9 @@
 PogO Bot
 
 Commands:
-[maybe insert description in the future lol]
+  .nuke - This command has been temperarily disabled.
+  .join - Spam someone who is late for Lit Club.
+  .penis - Find out your penis length!
+  
+Auto-Replies:
+  'horny' - DMs a surprise ;)
