@@ -35,8 +35,19 @@ async def on_message(message):
         else:
             await message.channel.send("Error: Invalid Input")
 
-    if '.penis' in message.content.lower():
-        await message.channel.send("{}'S PENIS SIZE: 8{}>".format(message.content[7:], random.randint(0, 20) * "="))
+    if message.content.lower().startswith(".penis"):
+        output = message.content.split()
+        if "@everyone" in output:
+            await message.author.send("Look buddy, you better CUT THAT OUT.")
+        elif len(output) == 2:
+            await message.channel.send("{}'S PENIS SIZE: 8{}>".format(message.content[7:], random.randint(0, 20) * "="))
+        else:
+            await message.channel.send("Error: Invalid Input")
+
+    if '.ppbegin' == message.content.lower():
+        ppnames = ["determined dong", "dangerous dick", "colossal cock", "pleasant penis"]
+        ppname = ppnames[random.randint(0, 3)]
+        await message.channel.send("The story of your {} begins...".format(ppname))
 
     # Replies
     if 'horny' in message.content.lower():
