@@ -23,8 +23,7 @@ async def on_message(message):
 
     # Commands
     if '.nuke' == message.content.lower():
-        for i in range(20):
-            await message.channel.send('@everyone')
+        await message.channel.send('This command has been temperarily disabled.')
     if '.join' in message.content.lower():
         for i in range(10):
             await message.channel.send("{}, JUAN NOW DUDE".format(message.content[6:]))
