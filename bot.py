@@ -13,8 +13,8 @@ client = discord.Client()
 @client.event
 async def on_ready():
     guild = discord.utils.get(client.guilds, name=GUILD)
-    print(f'{client.user} is connected to the following guild:\n'
-          f'{guild.name} (id: {guild.id})')
+    print('{} is connected to the following guild:\n{} (id: {})'
+          .format(client.user, guild.name, guild.id))
     await client.change_presence(activity=discord.Game(name='with your mom'))
 
 
@@ -23,16 +23,21 @@ async def on_message(message):
 
     # Commands
     if '.nuke' == message.content.lower():
-        await message.channel.send('This command has been temperarily disabled.')
-    if '.join' in message.content.lower():
-        for i in range(10):
-            await message.channel.send("{}, JUAN NOW DUDE".format(message.content[6:]))
+        await message.channel.send('This command has been temporarily disabled.')
+    if message.content.lower().startswith(".join"):
+        output = message.content.split()
+        if "@everyone" in output:
+            await message.author.send("Look buddy, you better CUT THAT OUT.")
+        elif len(output) == 2:
+            for i in range(10):
+                await message.channel.send("{}, JUAN NOW DUDE".format(output[1]))
+        else:
+            await message.channel.send("Error: Invalid Input")
     if '.penis' in message.content.lower():
         await message.channel.send("{}'S PENIS SIZE: 8{}>".format(message.content[7:], random.randint(0, 20) * "="))
-    
+
     # Replies
     if 'horny' in message.content.lower():
-        await message.channel.send('Check your DMs for a surprise ;)')
         await message.author.send('hey baby, wanna bang?')
 
 
