@@ -2,10 +2,12 @@ import os
 import discord
 from dotenv import load_dotenv
 import random
+from penis import Penis
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 GUILD = os.getenv('DISCORD_GUILD')
+PPNAMES = ["determined dong", "dangerous dick", "colossal cock", "pleasant penis"]
 
 client = discord.Client()
 
@@ -45,9 +47,16 @@ async def on_message(message):
             await message.channel.send("Error: Invalid Input")
 
     if '.ppbegin' == message.content.lower():
-        ppnames = ["determined dong", "dangerous dick", "colossal cock", "pleasant penis"]
-        ppname = ppnames[random.randint(0, 3)]
-        await message.channel.send("The story of your {} begins...".format(ppname))
+        pp = Penis(message.author)
+        with open("pp.txt", "r+") as ppdata:
+            for data in ppdata:
+                if pp.user in data:
+                    await message.channel.send("You already have a penis, idiot")
+                    break
+            else:
+                print(f"{pp.user},{pp.length}", file=ppdata)
+                ppname = PPNAMES[random.randint(0, 3)]
+                await message.channel.send("The story of your {} begins...".format(ppname))
 
     # Replies
     if 'horny' in message.content.lower():
