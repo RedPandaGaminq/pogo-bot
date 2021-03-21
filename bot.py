@@ -48,7 +48,7 @@ async def on_message(message):
                 for i in range(10, 0, -1):
                     await message.channel.send(i)
                     time.sleep(1)
-                if random.randint(1, 100) in range(1, success_rate + 1):
+                if random.randint(1, 100) <= success_rate:
                     await message.channel.send("NUKE LAUNCH SUCCESSFUL!")
                     for i in range(20):
                         await message.channel.send("@everyone")
