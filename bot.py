@@ -3,6 +3,9 @@ import discord
 from dotenv import load_dotenv
 import random
 from penis import Penis
+import time
+import asyncio
+
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
@@ -23,10 +26,40 @@ async def on_ready():
 @client.event
 async def on_message(message):
 
-    # Commands
+    # Command: .nuke
     if '.nuke' == message.content.lower():
-        await message.channel.send('This command has been temporarily disabled.')
+        number = random.randint(0, 9999)
+        success_rate = random.randint(1, 10)
+        await message.channel.send('Warning! Prototype Nuke {} has a {}% fail rate! Failure will be devastating!'
+                                   .format(number, 100 - success_rate))
+        await message.channel.send("Are you sure you want to launch Nuke {}?".format(number))
 
+        def check(m):
+            return 'yes' in m.content.lower() or 'no' in m.content.lower()
+
+        try:
+            message = await client.wait_for('message', timeout=30, check=check)
+        except asyncio.TimeoutError:
+            await message.channel.send("{}, maybe say 'yes' or 'no' DUDE...".format(message.author.mention))
+        else:
+            if 'yes' in message.content.lower():
+                for i in range(10):
+                    await message.channel.send("WARNING! LAUNCHING NUKE {}!".format(number))
+                for i in range(10, 0, -1):
+                    await message.channel.send(i)
+                    time.sleep(1)
+                if random.randint(1, 100) in range(1, success_rate + 1):
+                    await message.channel.send("NUKE LAUNCH SUCCESSFUL!")
+                    for i in range(20):
+                        await message.channel.send("@everyone")
+                else:
+                    await message.channel.send("Launch failed...")
+                    for i in range(20):
+                        await message.author.send("YOU HAVE BEEN NUKED!")
+            else:
+                await message.channel.send("Lame... goodbye")
+
+    # Command: .join
     if message.content.lower().startswith(".join"):
         output = message.content.split()
         if "@everyone" in output:
@@ -37,15 +70,17 @@ async def on_message(message):
         else:
             await message.channel.send("Error: Invalid Input")
 
+    # Command: .penis
     if message.content.lower().startswith(".penis"):
         output = message.content.split()
         if "@everyone" in output:
-            await message.author.send("YOUR PP SMALL LOL")
+            await message.author.send("YOUR PP SMALL OMEGALUL")
         elif len(output) == 2:
             await message.channel.send("{}'S PENIS SIZE: 8{}>".format(message.content[7:], random.randint(0, 20) * "="))
         else:
             await message.channel.send("Error: Invalid Input")
 
+    # Command: .ppbegin
     if '.ppbegin' == message.content.lower():
         pp = Penis(message.author)
         with open("pp.txt", "r+") as pp_data:
@@ -74,7 +109,7 @@ async def on_message(message):
             else:
                 await message.channel.send("They don't even have a penis LOL")
 
-    # Replies
+    # Reply: 'horny'
     if 'horny' in message.content.lower():
         await message.author.send('hey baby, wanna bang?')
 
