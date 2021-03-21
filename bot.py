@@ -2,12 +2,15 @@ import os
 import discord
 from dotenv import load_dotenv
 import random
+from penis import Penis
 import time
 import asyncio
+
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 GUILD = os.getenv('DISCORD_GUILD')
+PP_NAMES = ["determined dong", "dangerous dick", "colossal cock", "pleasant penis", "sizable schlong"]
 
 client = discord.Client()
 
@@ -79,9 +82,32 @@ async def on_message(message):
 
     # Command: .ppbegin
     if '.ppbegin' == message.content.lower():
-        pp_names = ["determined dong", "dangerous dick", "colossal cock", "pleasant penis"]
-        pp_name = pp_names[random.randint(0, 3)]
-        await message.channel.send("The story of your {} begins...".format(pp_name))
+        pp = Penis(message.author)
+        with open("pp.txt", "r+") as pp_data:
+            for data in pp_data:
+                if pp.user_id in data:
+                    await message.channel.send("You already have a penis, idiot")
+                    break
+            else:
+                print(f"{pp.user_id},{pp.length},", file=pp_data)
+                pp_name = PP_NAMES[random.randint(0, len(PP_NAMES) - 1)]
+                await message.channel.send("The story of your {} begins...".format(pp_name))
+
+    if message.content.lower().startswith(".ppcheck"):
+        output = message.content.split()
+        if len(output) == 1:
+            pp_username = message.author
+        else:
+            pp_username = message.mentions[0]
+        pp_id = str(pp_username.id)
+        with open("pp.txt", "r") as pp_data:
+            for data in pp_data:
+                if pp_id in data:
+                    length = int(data.split(',')[1])
+                    await message.channel.send(f"{str(pp_username)}'S PENIS:\n8{'=' * length}>\n({length} inches long)")
+                    break
+            else:
+                await message.channel.send("They don't even have a penis LOL")
 
     # Reply: 'horny'
     if 'horny' in message.content.lower():
