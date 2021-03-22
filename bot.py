@@ -11,9 +11,24 @@ load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 GUILD = os.getenv('DISCORD_GUILD')
 PP_NAMES = ["determined dong", "dangerous dick", "colossal cock", "pleasant penis", "sizable schlong"]
+pp_dict = {}
+
+
+def load_pp_data():
+    with open("pp.txt", "r") as pp_list_data:
+        for line in pp_list_data:
+            split_line = line.split(",")
+            pp_dict[split_line[0]] = [int(split_line[1]), split_line[2]]
+    pp_list_data.close()
+
+
+def save_pp_data():
+    with open("pp.txt", "w") as pp_list_data:
+        for user_id in list(pp_dict.keys()):
+            print("{},{},".format(user_id, pp_dict[user_id][0]), file=pp_list_data)
+
 
 client = discord.Client()
-
 
 @client.event
 async def on_ready():
@@ -21,10 +36,14 @@ async def on_ready():
     print('{} is connected to the following guild:\n{} (id: {})'
           .format(client.user, guild.name, guild.id))
     await client.change_presence(activity=discord.Game(name='with your mom'))
+    load_pp_data()
 
 
 @client.event
 async def on_message(message):
+
+    def check(m):
+        return 'yes' in m.content.lower() or 'no' in m.content.lower()
 
     # Command: .nuke
     if '.nuke' == message.content.lower():
@@ -33,9 +52,6 @@ async def on_message(message):
         await message.channel.send('Warning! Prototype Nuke {} has a {}% fail rate! Failure will be devastating!'
                                    .format(number, 100 - success_rate))
         await message.channel.send("Are you sure you want to launch Nuke {}?".format(number))
-
-        def check(m):
-            return 'yes' in m.content.lower() or 'no' in m.content.lower()
 
         try:
             message = await client.wait_for('message', timeout=30, check=check)
@@ -83,15 +99,23 @@ async def on_message(message):
     # Command: .ppbegin
     if '.ppbegin' == message.content.lower():
         pp = Penis(message.author)
-        with open("pp.txt", "r+") as pp_data:
-            for data in pp_data:
-                if pp.user_id in data:
-                    await message.channel.send("You already have a penis, idiot")
-                    break
-            else:
-                print(f"{pp.user_id},{pp.length},", file=pp_data)
-                pp_name = PP_NAMES[random.randint(0, len(PP_NAMES) - 1)]
-                await message.channel.send("The story of your {} begins...".format(pp_name))
+        if pp.user_id in list(pp_dict.keys()):
+            await message.channel.send("You already have a penis, idiot")
+        else:
+            pp_dict[pp.user_id] = [pp.length, "\n"]
+            save_pp_data()
+            pp_name = PP_NAMES[random.randint(0, len(PP_NAMES) - 1)]
+            await message.channel.send("The story of your {} begins...".format(pp_name))
+        # with open("pp.txt", "r+") as pp_data:
+        #     for data in pp_data:
+        #         if pp.user_id in data:
+        #             await message.channel.send("You already have a penis, idiot")
+        #             break
+        #     else:
+        #         print(f"{pp.user_id},{pp.length},", file=pp_data)
+        #         pp_name = PP_NAMES[random.randint(0, len(PP_NAMES) - 1)]
+        #         await message.channel.send("The story of your {} begins...".format(pp_name))
+        # pp_data.close()
 
     if message.content.lower().startswith(".ppcheck"):
         output = message.content.split()
@@ -100,14 +124,44 @@ async def on_message(message):
         else:
             pp_username = message.mentions[0]
         pp_id = str(pp_username.id)
-        with open("pp.txt", "r") as pp_data:
-            for data in pp_data:
-                if pp_id in data:
-                    length = int(data.split(',')[1])
-                    await message.channel.send(f"{str(pp_username)}'S PENIS:\n8{'=' * length}>\n({length} inches long)")
-                    break
-            else:
-                await message.channel.send("They don't even have a penis LOL")
+        if pp_id in list(pp_dict.keys()):
+            length = pp_dict[pp_id][0]
+            await message.channel.send(f"{str(pp_username)}'S PENIS:\n8{'=' * int(length)}>\n({length} inches long)")
+        else:
+            await message.channel.send("They don't even have a penis LOL")
+        # with open("pp.txt", "r") as pp_data:
+        #     for data in pp_data:
+        #         if pp_id in data:
+        #             length = int(data.split(',')[1])
+        #             await message.channel.send(f"{str(pp_username)}'S PENIS:\n8{'=' * length}>\n({length} inches long)")
+        #             break
+        #     else:
+        #         await message.channel.send("They don't even have a penis LOL")
+        # pp_data.close()
+
+    if message.content.lower().startswith(".pproulette"):
+        print(message.author.id)
+        roulette_user = message.author.id
+        await message.channel.send("Are you sure you want to play russian roulette with your schlong?\n"
+                                   "20% Chance to have your penis size get sent to 2 inches\n"
+                                   "80% Chance to escape unscathed and have your penis size double\n")
+        try:
+            message = await client.wait_for('message', timeout=30, check=check)
+        except asyncio.TimeoutError:
+            await message.channel.send("{}, maybe say 'yes' or 'no' DUDE...".format(message.author.mention))
+        else:
+            if 'yes' in message.content.lower() and message.author.id == roulette_user:
+                number = random.randint(1, 5)
+                if number == 1:
+                    pp_dict[str(message.author.id)][0] = 2
+                    await message.channel.send("YOUR PENIS DIDN'T MAKE IT LOL\nPENIS SENT BACK TO TWO INCHES")
+                else:
+                    pp_dict[str(message.author.id)][0] *= 2
+                    await message.channel.send("You are safe... for now...\n(penis size doubled)")
+                save_pp_data()
+
+    if '.testppdict' == message.content.lower():
+        await message.channel.send(pp_dict)
 
     # Reply: 'horny'
     if 'horny' in message.content.lower():
