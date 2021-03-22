@@ -106,17 +106,8 @@ async def on_message(message):
             save_pp_data()
             pp_name = PP_NAMES[random.randint(0, len(PP_NAMES) - 1)]
             await message.channel.send("The story of your {} begins...".format(pp_name))
-        # with open("pp.txt", "r+") as pp_data:
-        #     for data in pp_data:
-        #         if pp.user_id in data:
-        #             await message.channel.send("You already have a penis, idiot")
-        #             break
-        #     else:
-        #         print(f"{pp.user_id},{pp.length},", file=pp_data)
-        #         pp_name = PP_NAMES[random.randint(0, len(PP_NAMES) - 1)]
-        #         await message.channel.send("The story of your {} begins...".format(pp_name))
-        # pp_data.close()
 
+    # Command: .ppcheck
     if message.content.lower().startswith(".ppcheck"):
         output = message.content.split()
         if len(output) == 1:
@@ -129,16 +120,8 @@ async def on_message(message):
             await message.channel.send(f"{str(pp_username)}'S PENIS:\n8{'=' * int(length)}>\n({length} inches long)")
         else:
             await message.channel.send("They don't even have a penis LOL")
-        # with open("pp.txt", "r") as pp_data:
-        #     for data in pp_data:
-        #         if pp_id in data:
-        #             length = int(data.split(',')[1])
-        #             await message.channel.send(f"{str(pp_username)}'S PENIS:\n8{'=' * length}>\n({length} inches long)")
-        #             break
-        #     else:
-        #         await message.channel.send("They don't even have a penis LOL")
-        # pp_data.close()
 
+    # Command: .pproulette
     if message.content.lower().startswith(".pproulette"):
         print(message.author.id)
         roulette_user = message.author.id
@@ -159,9 +142,6 @@ async def on_message(message):
                     pp_dict[str(message.author.id)][0] *= 2
                     await message.channel.send("You are safe... for now...\n(penis size doubled)")
                 save_pp_data()
-
-    if '.testppdict' == message.content.lower():
-        await message.channel.send(pp_dict)
 
     # Reply: 'horny'
     if 'horny' in message.content.lower():
