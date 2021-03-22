@@ -42,11 +42,12 @@ async def on_ready():
 @client.event
 async def on_message(message):
 
-    def check(m):
-        return 'yes' in m.content.lower() or 'no' in m.content.lower()
-
     # Command: .nuke
     if '.nuke' == message.content.lower():
+
+        def check(m):
+            return 'yes' in m.content.lower() or 'no' in m.content.lower()
+
         number = random.randint(0, 9999)
         success_rate = random.randint(1, 10)
         await message.channel.send('Warning! Prototype Nuke {} has a {}% fail rate! Failure will be devastating!'
@@ -116,14 +117,21 @@ async def on_message(message):
             pp_username = message.mentions[0]
         pp_id = str(pp_username.id)
         if pp_id in list(pp_dict.keys()):
-            length = pp_dict[pp_id][0]
-            await message.channel.send(f"{str(pp_username)}'S PENIS:\n8{'=' * int(length)}>\n({length} inches long)")
+            length = int(pp_dict[pp_id][0])
+            megalengths = length // 1000
+            await message.channel.send(f"{str(pp_username)}'S PENIS:\n"
+                                       f"8{'**{}**'.format('=' * megalengths) if megalengths > 0 else ''}"
+                                       f"{'=' * (length - (megalengths * 1000))}>\n"
+                                       f"({length} inches long)")
         else:
             await message.channel.send("They don't even have a penis LOL")
 
     # Command: .pproulette
     if message.content.lower().startswith(".pproulette"):
-        print(message.author.id)
+
+        def check(m):
+            return 'yes' in m.content.lower() or 'no' in m.content.lower()
+
         roulette_user = message.author.id
         await message.channel.send("Are you sure you want to play russian roulette with your schlong?\n"
                                    "20% Chance to have your penis size get sent to 2 inches\n"
