@@ -42,6 +42,11 @@ async def on_ready():
 @client.event
 async def on_message(message):
 
+    # Command: .help
+    if '.help' == message.content.lower():
+        await message.channel.send('>>>test')
+        await message.channel.send('>>>test')
+
     # Command: .nuke
     if '.nuke' == message.content.lower():
 
@@ -99,6 +104,7 @@ async def on_message(message):
     # Command: .ppbegin
     if '.ppbegin' == message.content.lower():
         pp = Penis(message.author)
+
         if pp.user_id in list(pp_dict.keys()):
             await message.channel.send("You already have a penis, idiot")
         else:
@@ -111,6 +117,7 @@ async def on_message(message):
     if message.content.lower().startswith(".ppcheck") or message.content.lower().startswith(".ppc"):
         user_input = message.content.split()
         if len(user_input) == 1:
+
             pp_username = message.author
         else:
             pp_username = message.mentions[0]
@@ -176,6 +183,13 @@ async def on_message(message):
     # Reply: 'horny'
     if 'horny' in message.content.lower():
         await message.author.send('hey baby, wanna bang?')
+
+    # Reply
+    if message.author.bot:
+        return
+    else:
+        await message.channel.send("\"{},\" SEZ YOU".format(
+            "".join([x if i % 2 else x.upper() for i, x in enumerate(message.content)])))
 
 
 client.run(TOKEN)
