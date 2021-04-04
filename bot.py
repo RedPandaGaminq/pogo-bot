@@ -26,6 +26,11 @@ async def on_ready():
 @client.event
 async def on_message(message):
 
+    # Command: .help
+    if '.help' == message.content.lower():
+        await message.channel.send('>>>test')
+        await message.channel.send('>>>test')
+
     # Command: .nuke
     if '.nuke' == message.content.lower():
         number = random.randint(0, 9999)
@@ -93,6 +98,7 @@ async def on_message(message):
                 pp_name = PP_NAMES[random.randint(0, len(PP_NAMES) - 1)]
                 await message.channel.send("The story of your {} begins...".format(pp_name))
 
+    # Command: .ppcheck
     if message.content.lower().startswith(".ppcheck"):
         output = message.content.split()
         if len(output) == 1:
@@ -112,6 +118,13 @@ async def on_message(message):
     # Reply: 'horny'
     if 'horny' in message.content.lower():
         await message.author.send('hey baby, wanna bang?')
+
+    # Reply
+    if message.author.bot:
+        return
+    else:
+        await message.channel.send("\"{},\" SEZ YOU".format(
+            "".join([x if i % 2 else x.upper() for i, x in enumerate(message.content)])))
 
 
 client.run(TOKEN)
