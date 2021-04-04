@@ -163,6 +163,16 @@ async def on_message(message):
         for i in range(0, min(len(current_leaderboard), 11)):
             await message.channel.send("{} | {}".format(current_leaderboard[i][1], current_leaderboard[i][0]))
 
+    if message.content.lower().startswith(".jeremy"):
+        output = message.content.split()
+        if "@everyone" in output:
+            await message.author.send("Look buddy, you better CUT THAT OUT.")
+        elif len(output) == 2:
+            for i in range(50):
+                await message.channel.send("{} CHECK WEEKEND WANKING CHAT NOW DUDE".format(output[1]))
+        else:
+            await message.channel.send("Error: Invalid Input")
+
     # Reply: 'horny'
     if 'horny' in message.content.lower():
         await message.author.send('hey baby, wanna bang?')
